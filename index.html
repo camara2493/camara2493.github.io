@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mamoudou Camara — Data Scientist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0a0f1e;
+      --bg2:      #111827;
+      --bg3:      #1a2235;
+      --accent:   #00d4ff;
+      --accent2:  #7c3aed;
+      --green:    #10b981;
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --border:   rgba(255,255,255,0.08);
+      --font:     'Space Grotesk', sans-serif;
+      --mono:     'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2.5rem;
+      background: rgba(10,15,30,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.9rem;
+      font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 40%, rgba(0,212,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 60%, rgba(124,58,237,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; max-width: 1100px; width: 100%; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3);
+      border-radius: 100px; padding: 0.35rem 1rem;
+      font-family: var(--mono); font-size: 0.78rem;
+      color: var(--accent); margin-bottom: 1.5rem;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+           animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 700; line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .hero h1 span { color: var(--accent); }
+
+    .hero-subtitle {
+      font-size: 1.1rem; color: var(--muted); margin-bottom: 2rem;
+      max-width: 480px;
+    }
+
+    .hero-stats {
+      display: flex; gap: 2rem; margin-bottom: 2.5rem;
+    }
+    .stat { display: flex; flex-direction: column; }
+    .stat-num {
+      font-size: 1.8rem; font-weight: 700; color: var(--accent);
+      font-family: var(--mono);
+    }
+    .stat-label { font-size: 0.78rem; color: var(--muted); }
+
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.75rem 1.75rem; border-radius: 8px; font-size: 0.9rem;
+      font-weight: 600; cursor: pointer; text-decoration: none;
+      transition: all 0.2s; font-family: var(--font);
+    }
+    .btn-primary {
+      background: var(--accent); color: #0a0f1e; border: none;
+    }
+    .btn-primary:hover { background: #00b8d9; transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Terminal hero side */
+    .hero-terminal {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .terminal-bar {
+      background: var(--bg3); padding: 0.75rem 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .terminal-body { padding: 1.5rem; font-family: var(--mono); font-size: 0.82rem; }
+    .t-line { margin-bottom: 0.5rem; }
+    .t-prompt { color: var(--accent); }
+    .t-cmd { color: var(--text); }
+    .t-out { color: var(--muted); }
+    .t-green { color: var(--green); }
+    .t-purple { color: #a78bfa; }
+    .t-yellow { color: #fbbf24; }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-family: var(--mono); font-size: 0.78rem; color: var(--accent);
+      letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .section-desc { color: var(--muted); max-width: 600px; margin-bottom: 3rem; }
+    .divider {
+      width: 48px; height: 3px; background: var(--accent);
+      border-radius: 2px; margin-bottom: 1.5rem;
+    }
+
+    /* ── SKILLS ── */
+    .skills-bg { background: var(--bg2); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .skill-card {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .skill-icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .skill-title { font-weight: 600; margin-bottom: 0.75rem; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag {
+      background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
+      color: var(--accent); border-radius: 6px;
+      padding: 0.2rem 0.6rem; font-size: 0.75rem; font-family: var(--mono);
+    }
+    .tag.purple {
+      background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.3);
+      color: #a78bfa;
+    }
+    .tag.green {
+      background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.3);
+      color: var(--green);
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+    .project-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.75rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .project-card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-4px); }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .project-icon { font-size: 2rem; }
+    .project-links { display: flex; gap: 0.5rem; }
+    .project-link {
+      color: var(--muted); text-decoration: none; font-size: 0.85rem;
+      padding: 0.3rem 0.7rem; border: 1px solid var(--border);
+      border-radius: 6px; transition: all 0.2s; font-family: var(--mono);
+    }
+    .project-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    .project-title { font-size: 1.1rem; font-weight: 700; }
+    .project-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+    .project-metrics {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+    }
+    .metric {
+      display: flex; flex-direction: column;
+    }
+    .metric-val {
+      font-family: var(--mono); font-size: 1rem;
+      font-weight: 600; color: var(--accent);
+    }
+    .metric-label { font-size: 0.72rem; color: var(--muted); }
+    .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
+
+    /* ── EXPERIENCE ── */
+    .exp-bg { background: var(--bg2); }
+    .timeline { display: flex; flex-direction: column; gap: 2rem; }
+    .exp-card {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.75rem;
+      border-left: 3px solid var(--accent);
+    }
+    .exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+    .exp-title { font-weight: 700; font-size: 1.05rem; }
+    .exp-company { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .exp-date {
+      font-family: var(--mono); font-size: 0.78rem; color: var(--muted);
+      background: var(--bg2); padding: 0.25rem 0.6rem; border-radius: 6px;
+      white-space: nowrap;
+    }
+    .exp-list { list-style: none; margin-top: 0.75rem; }
+    .exp-list li {
+      color: var(--muted); font-size: 0.9rem; padding: 0.25rem 0;
+      display: flex; gap: 0.5rem;
+    }
+    .exp-list li::before { content: "→"; color: var(--accent); flex-shrink: 0; }
+
+    /* ── CERTIFICATIONS ── */
+    .certs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    .cert-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem;
+      display: flex; gap: 1rem; align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .cert-card:hover { border-color: var(--accent); }
+    .cert-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .cert-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .cert-org { color: var(--muted); font-size: 0.8rem; }
+    .cert-date { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); margin-top: 0.25rem; }
+
+    /* ── CONTACT ── */
+    .contact-bg { background: var(--bg2); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem; background: var(--bg3);
+      border: 1px solid var(--border); border-radius: 10px;
+      text-decoration: none; color: var(--text); transition: all 0.2s;
+    }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent); }
+    .contact-link-icon { font-size: 1.25rem; }
+    .contact-link-label { font-size: 0.85rem; color: var(--muted); }
+    .contact-link-val { font-weight: 600; font-size: 0.95rem; }
+
+    .available-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 100px; padding: 0.5rem 1.25rem;
+      color: var(--green); font-weight: 600; font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 0.85rem; font-family: var(--mono);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem; }
+      .nav-links { display: none; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-terminal { display: none; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">mc.dev</div>
+  <ul class="nav-links">
+    <li><a href="#skills">Compétences</a></li>
+    <li><a href="#projects">Projets</a></li>
+    <li><a href="#experience">Expérience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Disponible CDI — Juillet 2026
+      </div>
+      <h1>Mamoudou<br /><span>Camara</span></h1>
+      <p class="hero-subtitle">
+        Data Scientist spécialisé Big Data & IA — Python, R, SQL, Power BI, QGIS.<br />
+        195 pays analysés · +50 Go de données · MAPE &lt; 5%
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">195</span>
+          <span class="stat-label">Pays couverts</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">+50Go</span>
+          <span class="stat-label">Données traitées</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">-60%</span>
+          <span class="stat-label">Temps de traitement</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">&lt;5%</span>
+          <span class="stat-label">MAPE modèles ML</span>
+        </div>
+      </div>
+      <div class="hero-btns">
+        <a href="#projects" class="btn btn-primary">Voir mes projets</a>
+        <a href="mailto:mamoudousoba93@gmail.com" class="btn btn-outline">Me contacter</a>
+      </div>
+    </div>
+
+    <!-- Terminal -->
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot" style="background:#ff5f57"></div>
+        <div class="terminal-dot" style="background:#febc2e"></div>
+        <div class="terminal-dot" style="background:#28c840"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">$ </span><span class="t-cmd">python profil.py</span></div>
+        <div class="t-line t-out">━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+        <div class="t-line"><span class="t-purple">name</span>    <span class="t-out">:</span> <span class="t-green">"Mamoudou Camara"</span></div>
+        <div class="t-line"><span class="t-purple">role</span>    <span class="t-out">:</span> <span class="t-green">"Data Scientist"</span></div>
+        <div class="t-line"><span class="t-purple">location</span><span class="t-out">:</span> <span class="t-green">"Serris, France 🇫🇷"</span></div>
+        <div class="t-line t-out">━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+        <div class="t-line"><span class="t-purple">skills</span>  <span class="t-out">:</span> <span class="t-yellow">["Python", "R", "SQL"]</span></div>
+        <div class="t-line"><span class="t-purple">ml</span>      <span class="t-out">:</span> <span class="t-yellow">["LSTM", "SARIMA", "RF"]</span></div>
+        <div class="t-line"><span class="t-purple">cloud</span>   <span class="t-out">:</span> <span class="t-yellow">["AWS ☁️ Certifié"]</span></div>
+        <div class="t-line t-out">━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+        <div class="t-line"><span class="t-prompt">$ </span><span class="t-green">✓ Disponible dès Juillet 2026</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills-bg" id="skills">
+  <div class="container">
+    <div class="section-label">Stack technique</div>
+    <h2 class="section-title">Compétences</h2>
+    <div class="divider"></div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon">🐍</div>
+        <div class="skill-title">Data & Big Data</div>
+        <div class="skill-tags">
+          <span class="tag">Python</span><span class="tag">pandas</span>
+          <span class="tag">NumPy</span><span class="tag">R</span>
+          <span class="tag">PySpark</span><span class="tag">Hadoop</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🤖</div>
+        <div class="skill-title">Machine Learning & IA</div>
+        <div class="skill-tags">
+          <span class="tag purple">Scikit-learn</span>
+          <span class="tag purple">Keras</span>
+          <span class="tag purple">LSTM</span>
+          <span class="tag purple">Prophet</span>
+          <span class="tag purple">ARIMA/SARIMA</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🗄️</div>
+        <div class="skill-title">Bases de Données</div>
+        <div class="skill-tags">
+          <span class="tag">SQL</span><span class="tag">PostgreSQL</span>
+          <span class="tag">MySQL</span><span class="tag">MongoDB</span>
+          <span class="tag">PostGIS</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🌍</div>
+        <div class="skill-title">Géospatial & Viz</div>
+        <div class="skill-tags">
+          <span class="tag green">QGIS</span>
+          <span class="tag green">GeoServer</span>
+          <span class="tag green">GeoNode</span>
+          <span class="tag green">Power BI</span>
+          <span class="tag green">Tableau</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">☁️</div>
+        <div class="skill-title">Cloud & Outils</div>
+        <div class="skill-tags">
+          <span class="tag">AWS ✓</span><span class="tag">Git</span>
+          <span class="tag">Docker</span><span class="tag">Jupyter</span>
+          <span class="tag">Excel</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">✨</div>
+        <div class="skill-title">IA Générative</div>
+        <div class="skill-tags">
+          <span class="tag purple">Claude</span>
+          <span class="tag purple">ChatGPT</span>
+          <span class="tag purple">Prompt Engineering</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-label">GitHub Projects</div>
+    <h2 class="section-title">Projets</h2>
+    <div class="divider"></div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">🏙️</div>
+          <div class="project-links">
+            <a href="https://github.com/camara2493/paris-immobilier-series-temporelles" target="_blank" class="project-link">GitHub →</a>
+          </div>
+        </div>
+        <div class="project-title">Analyse Immobilier Parisien</div>
+        <div class="project-desc">
+          Analyse de 10 ans de transactions DVF (2010–2020). Modélisation ARIMA → SARIMA → SARIMAX avec variables exogènes. Tests ADF, Shapiro-Wilk, cointégration.
+        </div>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">+500K</span><span class="metric-label">Transactions</span></div>
+          <div class="metric"><span class="metric-val">&lt;5%</span><span class="metric-label">MAPE</span></div>
+          <div class="metric"><span class="metric-val">10 ans</span><span class="metric-label">Données</span></div>
+        </div>
+        <div class="project-stack">
+          <span class="tag">Python</span><span class="tag">SARIMAX</span>
+          <span class="tag">statsmodels</span><span class="tag green">Power BI</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">⚡</div>
+          <div class="project-links">
+            <a href="https://github.com/camara2493/prediction-conso-electrique-france" target="_blank" class="project-link">GitHub →</a>
+          </div>
+        </div>
+        <div class="project-title">Prédiction Consommation Électrique</div>
+        <div class="project-desc">
+          Analyse de +3 ans de données horaires RTE. Comparaison de 4 modèles : ARIMA, SARIMA, Prophet et LSTM. Tests statistiques ADF, Ljung-Box, Shapiro-Wilk.
+        </div>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">+26K</span><span class="metric-label">Points horaires</span></div>
+          <div class="metric"><span class="metric-val">&lt;5%</span><span class="metric-label">MAPE</span></div>
+          <div class="metric"><span class="metric-val">4</span><span class="metric-label">Modèles</span></div>
+        </div>
+        <div class="project-stack">
+          <span class="tag">Python</span><span class="tag purple">LSTM</span>
+          <span class="tag purple">Prophet</span><span class="tag">SARIMA</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">📰</div>
+          <div class="project-links">
+            <a href="https://github.com/camara2493/detection-fake-news" target="_blank" class="project-link">GitHub →</a>
+          </div>
+        </div>
+        <div class="project-title">Détection de Fake News</div>
+        <div class="project-desc">
+          Classification binaire de 78 134 articles de presse. Comparaison ML vs Deep Learning. Prétraitement NLP : tokenisation, TF-IDF, padding.
+        </div>
+        <div class="project-metrics">
+          <div class="metric"><span class="metric-val">78K</span><span class="metric-label">Articles</span></div>
+          <div class="metric"><span class="metric-val">95%</span><span class="metric-label">Accuracy</span></div>
+          <div class="metric"><span class="metric-val">5</span><span class="metric-label">Modèles</span></div>
+        </div>
+        <div class="project-stack">
+          <span class="tag purple">Deep Learning</span><span class="tag">TF-IDF</span>
+          <span class="tag">Random Forest</span><span class="tag purple">Keras</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="exp-bg" id="experience">
+  <div class="container">
+    <div class="section-label">Parcours</div>
+    <h2 class="section-title">Expérience</h2>
+    <div class="divider"></div>
+    <div class="timeline">
+
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Data Scientist — Data Géospatiale (Big Data)</div>
+            <div class="exp-company">The Spring Charter · Paris</div>
+          </div>
+          <div class="exp-date">Déc. 2025 – Aujourd'hui</div>
+        </div>
+        <ul class="exp-list">
+          <li>Catalogue mondial de données géospatiales — 195 pays, +50 Go</li>
+          <li>5+ pipelines automatisés Python/R — réduction de 60% du temps de traitement</li>
+          <li>Plateforme GeoNode/GeoServer — architecture, hébergement, visualisation</li>
+          <li>3 tableaux de bord Power BI utilisés par +10 utilisateurs</li>
+          <li>Réduction de 80% des anomalies via contrôles qualité automatisés</li>
+        </ul>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Gestionnaire de Base de Données — Stage</div>
+            <div class="exp-company">Association DSD · Montpellier</div>
+          </div>
+          <div class="exp-date">Juin – Août 2023</div>
+        </div>
+        <ul class="exp-list">
+          <li>Intégration de 3 bases de données (+10 000 enregistrements) sous MySQL et SQL Server</li>
+          <li>Réduction de 80% des anomalies via plan de correction et contrôles qualité</li>
+          <li>Automatisation de requêtes SQL — réduction des tâches manuelles</li>
+        </ul>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Assistance Data Analyste — Stage</div>
+            <div class="exp-company">Afrikawork · Guinée</div>
+          </div>
+          <div class="exp-date">Juin – Août 2018</div>
+        </div>
+        <ul class="exp-list">
+          <li>Scripts de scraping Python/R — +5 000 enregistrements depuis +10 sources</li>
+          <li>8 indicateurs de performance — tableaux de bord pour pilotage stratégique</li>
+          <li>Analyse exploratoire (EDA) restituée à l'équipe dirigeante</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="container">
+    <div class="section-label">Certifications & Formation</div>
+    <h2 class="section-title">Diplômes & Certifications</h2>
+    <div class="divider"></div>
+    <div class="certs-grid">
+      <div class="cert-card">
+        <div class="cert-icon">☁️</div>
+        <div>
+          <div class="cert-name">AWS Academy Cloud Foundations</div>
+          <div class="cert-org">Amazon Web Services</div>
+          <div class="cert-date">Mai 2025</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-name">Master IA & Management</div>
+          <div class="cert-org">IA School · Paris</div>
+          <div class="cert-date">2023 – 2025</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🗄️</div>
+        <div>
+          <div class="cert-name">SQL Server 2022 Masterclass</div>
+          <div class="cert-org">Udemy · 29h</div>
+          <div class="cert-date">Mars 2024</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">📊</div>
+        <div>
+          <div class="cert-name">Data Science & ML Bootcamp with R</div>
+          <div class="cert-org">Udemy</div>
+          <div class="cert-date">Janv. 2023</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-name">Licence Big Data & Management</div>
+          <div class="cert-org">IA School · Paris</div>
+          <div class="cert-date">2022 – 2023</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">💻</div>
+        <div>
+          <div class="cert-name">Licence Informatique</div>
+          <div class="cert-org">Université de Normandie · Caen</div>
+          <div class="cert-date">2019 – 2022</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-bg" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <div class="section-label">Disponible</div>
+        <h2 class="section-title">Travaillons<br />ensemble</h2>
+        <div class="divider"></div>
+        <div class="available-badge">
+          <span class="dot"></span>
+          Disponible en CDI dès Juillet 2026
+        </div>
+        <p style="color:var(--muted); max-width:400px;">
+          Data Scientist passionné par la Big Data, l'IA et les données géospatiales. 
+          Mobile toute la France, véhicule personnel.
+        </p>
+      </div>
+      <div>
+        <div class="contact-links">
+          <a href="mailto:mamoudousoba93@gmail.com" class="contact-link">
+            <span class="contact-link-icon">📧</span>
+            <div>
+              <div class="contact-link-label">Email</div>
+              <div class="contact-link-val">mamoudousoba93@gmail.com</div>
+            </div>
+          </a>
+          <a href="tel:+33758924388" class="contact-link">
+            <span class="contact-link-icon">📱</span>
+            <div>
+              <div class="contact-link-label">Téléphone</div>
+              <div class="contact-link-val">07 58 92 43 88</div>
+            </div>
+          </a>
+          <a href="https://github.com/camara2493" target="_blank" class="contact-link">
+            <span class="contact-link-icon">💻</span>
+            <div>
+              <div class="contact-link-label">GitHub</div>
+              <div class="contact-link-val">github.com/camara2493</div>
+            </div>
+          </a>
+          <a href="https://linkedin.com/in/mamoudou-camara" target="_blank" class="contact-link">
+            <span class="contact-link-icon">💼</span>
+            <div>
+              <div class="contact-link-label">LinkedIn</div>
+              <div class="contact-link-val">linkedin.com/in/mamoudou-camara</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Mamoudou Camara · Data Scientist · Serris (77) · Construit avec ❤️</p>
+</footer>
+
+</body>
+</html>
